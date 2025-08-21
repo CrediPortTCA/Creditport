@@ -7,10 +7,21 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
         .gradient-bg { background: linear-gradient(135deg, #00a8e6 0%, #0066cc 50%, #004499 100%); }
         .att-gradient { background: linear-gradient(135deg, #00a8e6 0%, #ffffff 50%, #00a8e6 100%); }
-        .card-shadow { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .card-shadow { 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transition: box-shadow 0.3s ease;
+        }
+        .card-shadow:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 20px 20px -5px rgba(0, 0, 0, 0.08);
+        }
         .pulse-animation { animation: pulse 2s infinite; }
         @keyframes pulse {
           0%, 100% { transform: scale(1); }
@@ -25,9 +36,39 @@
         .att-bg-blue { background-color: #00a8e6; }
         .page-content {
           display: none;
+          opacity: 0;
+          transition: opacity 0.3s ease-in-out;
         }
         .page-content.active {
           display: block;
+          opacity: 1;
+        }
+        
+        /* Loading animation */
+        .loading-spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #00a8e6;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Focus styles for accessibility */
+        input:focus, select:focus, textarea:focus, button:focus {
+            outline: 2px solid #00a8e6;
+            outline-offset: 2px;
+        }
+        
+        /* Improved button states */
+        button:disabled {
+            transform: none !important;
         }
     </style>
 </head>
@@ -58,10 +99,28 @@
                 <a href="#cobertura" onclick="goToPage('cobertura')" class="hover:text-yellow-300 transition-colors" id="nav-cobertura">Cobertura</a>
                 <a href="#contacto" onclick="goToPage('contacto')" class="hover:text-yellow-300 transition-colors" id="nav-contacto">Contacto</a>
             </nav>
+            
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden text-white p-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="md:hidden bg-blue-800 px-6 py-4 hidden">
+            <div class="space-y-2">
+                <a href="#inicio" onclick="goToPage('inicio'); toggleMobileMenu()" class="block text-yellow-300 font-semibold py-2">Inicio</a>
+                <a href="#servicios" onclick="goToPage('servicios'); toggleMobileMenu()" class="block hover:text-yellow-300 transition-colors py-2">Servicios</a>
+                <a href="#promociones" onclick="goToPage('promociones'); toggleMobileMenu()" class="block hover:text-yellow-300 transition-colors py-2">Promociones</a>
+                <a href="#cobertura" onclick="goToPage('cobertura'); toggleMobileMenu()" class="block hover:text-yellow-300 transition-colors py-2">Cobertura</a>
+                <a href="#contacto" onclick="goToPage('contacto'); toggleMobileMenu()" class="block hover:text-yellow-300 transition-colors py-2">Contacto</a>
+            </div>
         </div>
     </header>
 
-   <!-- PÁGINA INICIO -->
+    <!-- PÁGINA INICIO -->
     <div id="inicio" class="page-content active">
         <!-- Hero Section -->
         <section class="relative py-20 px-6 overflow-hidden">
@@ -207,17 +266,16 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Servicios de interés *</label>
                             <div class="space-y-2">
-                                <label class="flex items-center">
-                                    <input type="checkbox" id="internet" class="mr-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="internet" name="servicios[]" value="Internet de Fibra Óptica" class="mr-2 w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                                     <span>Internet de Fibra Óptica</span>
                                 </label>
-                                <label class="flex items-center">
-                                    <input type="checkbox" id="movil" class="mr-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="movil" name="servicios[]" value="Planes Móviles 5G" class="mr-2 w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                                     <span>Planes Móviles 5G</span>
                                 </label>
-
-                                <label class="flex items-center">
-                                    <input type="checkbox" id="telefonia" class="mr-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="telefonia" name="servicios[]" value="Financiamiento de Teléfonos" class="mr-2 w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                                     <span>Financiamiento de Teléfonos</span>
                                 </label>
                             </div>
@@ -244,9 +302,10 @@
                             </div>
                         </div>
                         
-                        <button type="submit" 
-                                class="w-full att-bg-blue text-white py-4 px-6 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-all duration-300 transform hover:scale-105">
-                            📶 Solicitar Servicio
+                        <button type="submit" id="submitButton"
+                                class="w-full att-bg-blue text-white py-4 px-6 rounded-lg text-lg font-semibold hover:bg-blue-600 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span id="submitText">📶 Solicitar Servicio</span>
+                            <span id="loadingText" class="hidden">⏳ Enviando...</span>
                         </button>
                     </form>
                     
@@ -386,9 +445,11 @@
                             <div class="text-center mt-6">
                                 <p class="text-2xl font-bold att-blue">$55/mes</p>
                                 <p class="text-xs text-gray-500">Por 12 meses con autopago</p>
-                                <button class="w-full mt-4 att-bg-blue text-white py-2 rounded-lg font-bold hover:bg-blue-600 text-sm">
-                                    Contratar
-                                </button>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20plan%20*Internet%20300*%20📶%0A%0A📋%20*Detalles%20del%20plan:*%0A•%20Velocidad:%20300%20Mbps%20subida/bajada%0A•%20Precio:%20$55/mes%20por%2012%20meses%20con%20autopago%0A•%20Sin%20límites%20de%20datos%0A•%20Equipo%20incluido%0A•%20Instalación%20profesional%20gratuita%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 att-bg-blue text-white py-2 rounded-lg font-bold hover:bg-blue-600 text-sm block text-center">
+                                    📞 Contratar por WhatsApp
+                                </a>
                             </div>
                         </div>
 
@@ -410,9 +471,11 @@
                             <div class="text-center mt-6">
                                 <p class="text-2xl font-bold att-blue">$65/mes</p>
                                 <p class="text-xs text-gray-500">Por 12 meses con autopago</p>
-                                <button class="w-full mt-4 bg-purple-500 text-white py-2 rounded-lg font-bold hover:bg-purple-600 text-sm">
-                                    Contratar
-                                </button>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20plan%20*Internet%20500*%20📶%20(MÁS%20POPULAR)%0A%0A📋%20*Detalles%20del%20plan:*%0A•%20Velocidad:%20500%20Mbps%20subida/bajada%0A•%20Precio:%20$65/mes%20por%2012%20meses%20con%20autopago%0A•%20Sin%20límites%20de%20datos%0A•%20Equipo%20incluido%0A•%20HBO%20Max%20incluido%20🎬%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 bg-purple-500 text-white py-2 rounded-lg font-bold hover:bg-purple-600 text-sm block text-center">
+                                    📞 Contratar por WhatsApp
+                                </a>
                             </div>
                         </div>
 
@@ -431,9 +494,11 @@
                             <div class="text-center mt-6">
                                 <p class="text-2xl font-bold att-blue">$80/mes</p>
                                 <p class="text-xs text-gray-500">Por 12 meses con autopago</p>
-                                <button class="w-full mt-4 bg-green-500 text-white py-2 rounded-lg font-bold hover:bg-green-600 text-sm">
-                                    Contratar
-                                </button>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20plan%20*Internet%201000*%20📶%0A%0A📋%20*Detalles%20del%20plan:*%0A•%20Velocidad:%201000%20Mbps%20subida/bajada%0A•%20Precio:%20$80/mes%20por%2012%20meses%20con%20autopago%0A•%20Sin%20límites%20de%20datos%0A•%20Equipo%20premium%20incluido%0A•%20HBO%20Max%20incluido%20🎬%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 bg-green-500 text-white py-2 rounded-lg font-bold hover:bg-green-600 text-sm block text-center">
+                                    📞 Contratar por WhatsApp
+                                </a>
                             </div>
                         </div>
 
@@ -455,9 +520,11 @@
                             <div class="text-center mt-6">
                                 <p class="text-2xl font-bold att-blue">$110/mes</p>
                                 <p class="text-xs text-gray-500">Por 12 meses con autopago</p>
-                                <button class="w-full mt-4 bg-yellow-500 text-gray-900 py-2 rounded-lg font-bold hover:bg-yellow-400 text-sm">
-                                    Contratar
-                                </button>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20plan%20*Internet%202000*%20📶%20(ULTRA%20RÁPIDO)%0A%0A📋%20*Detalles%20del%20plan:*%0A•%20Velocidad:%202000%20Mbps%20subida/bajada%0A•%20Precio:%20$110/mes%20por%2012%20meses%20con%20autopago%0A•%20Sin%20límites%20de%20datos%0A•%20Gateway%20Wi-Fi%206E%20incluido%0A•%20HBO%20Max%20incluido%20🎬%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 bg-yellow-500 text-gray-900 py-2 rounded-lg font-bold hover:bg-yellow-400 text-sm block text-center">
+                                    📞 Contratar por WhatsApp
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -481,10 +548,12 @@
                             </div>
                             <div class="text-center mt-6">
                                 <p class="text-2xl font-bold att-blue">$65/mes</p>
-                                <p class="text-xs text-gray-500">Por línea (4 líneas)</p>
-                                <button class="w-full mt-4 att-bg-blue text-white py-2 rounded-lg font-bold hover:bg-blue-600 text-sm">
-                                    Contratar
-                                </button>
+                                <p class="text-xs text-gray-500">Plan ilimitado</p>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20plan%20*Unlimited%20Starter*%20📱%0A%0A📋%20*Detalles%20del%20plan:*%0A•%20Datos%20ilimitados%205G%0A•%20Precio:%20$65/mes%0A•%20Talk%20&%20Text%20ilimitado%0A•%20Hotspot%20móvil%20incluido%0A•%20Cobertura%205G%20nacional%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 att-bg-blue text-white py-2 rounded-lg font-bold hover:bg-blue-600 text-sm block text-center">
+                                    📞 Contratar por WhatsApp
+                                </a>
                             </div>
                         </div>
 
@@ -505,10 +574,12 @@
                             </div>
                             <div class="text-center mt-6">
                                 <p class="text-2xl font-bold att-blue">$75/mes</p>
-                                <p class="text-xs text-gray-500">Por línea (4 líneas)</p>
-                                <button class="w-full mt-4 bg-purple-500 text-white py-2 rounded-lg font-bold hover:bg-purple-600 text-sm">
-                                    Contratar
-                                </button>
+                                <p class="text-xs text-gray-500">Plan premium</p>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20plan%20*Unlimited%20Extra*%20📱%20(MÁS%20POPULAR)%0A%0A📋%20*Detalles%20del%20plan:*%0A•%20Datos%20ilimitados%20premium%205G%0A•%20Precio:%20$75/mes%0A•%2050GB%20hotspot%20móvil%0A•%20HBO%20Max%20incluido%20🎬%0A•%20Roaming%20en%20México/Canadá%20🌎%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 bg-purple-500 text-white py-2 rounded-lg font-bold hover:bg-purple-600 text-sm block text-center">
+                                    📞 Contratar por WhatsApp
+                                </a>
                             </div>
                         </div>
 
@@ -529,10 +600,12 @@
                             </div>
                             <div class="text-center mt-6">
                                 <p class="text-2xl font-bold att-blue">$85/mes</p>
-                                <p class="text-xs text-gray-500">Por línea (4 líneas)</p>
-                                <button class="w-full mt-4 bg-yellow-500 text-gray-900 py-2 rounded-lg font-bold hover:bg-yellow-400 text-sm">
-                                    Contratar
-                                </button>
+                                <p class="text-xs text-gray-500">Plan elite completo</p>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20plan%20*Unlimited%20Elite*%20📱%20(PREMIUM)%0A%0A📋%20*Detalles%20del%20plan:*%0A•%20Datos%20premium%20ilimitados%205G%0A•%20Precio:%20$85/mes%0A•%20100GB%20hotspot%20móvil%0A•%20HBO%20Max%20+%204%20servicios%20más%20🎬📺%0A•%20Roaming%20internacional%20🌍%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 bg-yellow-500 text-gray-900 py-2 rounded-lg font-bold hover:bg-yellow-400 text-sm block text-center">
+                                    📞 Contratar por WhatsApp
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -560,9 +633,11 @@
                             <div class="text-center mt-6">
                                 <p class="text-3xl font-bold att-blue">$245/mes</p>
                                 <p class="text-sm text-gray-500">Precio regular $265/mes - Ahorra $240/año</p>
-                                <button class="w-full mt-4 bg-green-500 text-white py-3 rounded-lg font-bold hover:bg-green-600">
-                                    Contratar Bundle
-                                </button>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20*Bundle%20Internet%20+%20Móvil*%20🎯%20(¡AHORRA%20$20/MES!)%0A%0A📋%20*Detalles%20del%20bundle:*%0A•%20Internet%20Fiber%20500%20Mbps%0A•%204%20líneas%20Unlimited%20Extra%0A•%20Precio:%20$245/mes%20(ahorro%20de%20$240/año)%0A•%20HBO%20Max%20incluido%20🎬%0A•%20Instalación%20gratuita%0A•%204%20smartphones%20con%20$0%20enganche%20📱%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 bg-green-500 text-white py-3 rounded-lg font-bold hover:bg-green-600 block text-center">
+                                    📞 Contratar Bundle por WhatsApp
+                                </a>
                             </div>
                         </div>
 
@@ -584,10 +659,131 @@
                             <div class="text-center mt-6">
                                 <p class="text-3xl font-bold att-blue">$320/mes</p>
                                 <p class="text-sm text-gray-500">Precio regular $400/mes - Ahorra $960/año</p>
-                                <button class="w-full mt-4 bg-yellow-500 text-gray-900 py-3 rounded-lg font-bold hover:bg-yellow-400">
-                                    Contratar Premium
-                                </button>
+                                <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Me%20interesa%20contratar%20el%20*Bundle%20Premium%20Completo*%20🎯%20(¡MÁXIMO%20AHORRO!)%0A%0A📋%20*Detalles%20del%20bundle:*%0A•%20Internet%20Fiber%201000%20Mbps%0A•%204%20líneas%20Unlimited%20Elite%0A•%20Precio:%20$320/mes%20(ahorro%20de%20$960/año)%0A•%20HBO%20Max%20+%204%20servicios%20streaming%20🎬📺%0A•%204%20iPhone%2015%20Pro%20incluidos%20📱%0A•%20Soporte%20premium%2024/7%0A%0A¿Podrían%20visitarme%20para%20procesar%20mi%20orden?%20🏠" 
+                                   target="_blank"
+                                   class="w-full mt-4 bg-yellow-500 text-gray-900 py-3 rounded-lg font-bold hover:bg-yellow-400 block text-center">
+                                    📞 Contratar Premium por WhatsApp
+                                </a>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Latest Phones Section -->
+                <div class="mb-16">
+                    <div class="text-center mb-8">
+                        <h3 class="text-2xl font-bold mb-4 text-gray-800">📱 Últimos Smartphones en Promoción</h3>
+                        <p class="text-gray-600 mb-6">Los teléfonos más nuevos con financiamiento especial a 36 meses</p>
+                        <a href="https://crediporttca.github.io/Reserva-ya-tu-Smartphone/" target="_blank" 
+                           class="inline-block bg-gradient-to-r from-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-bold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105">
+                            🛒 Ver Catálogo Completo de Smartphones
+                        </a>
+                    </div>
+                    
+                    <!-- Phones Showcase -->
+                    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <!-- iPhone 16 Pro Max -->
+                        <div class="card-shadow rounded-2xl p-8 bg-gradient-to-br from-gray-50 to-slate-100 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-purple-200">
+                            <div class="text-center mb-6">
+                                <div class="bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-bold inline-block mb-4">
+                                    ⭐ DESTACADO
+                                </div>
+                                <div class="w-48 h-60 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg">
+                                    <img src="https://crediporttca.github.io/Reserva-ya-tu-Smartphone/images/iphone15promax.jpg" 
+                                         alt="iPhone 16 Pro Max" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-full bg-gradient-to-b from-gray-800 to-black flex items-center justify-center" style="display: none;">
+                                        <div class="w-32 h-40 bg-gradient-to-b from-blue-900 to-purple-900 rounded-xl flex items-center justify-center">
+                                            <span class="text-white text-2xl">📱</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-2xl font-bold text-gray-800 mb-2">iPhone 16 Pro Max</h4>
+                                <p class="text-lg text-gray-600">256GB - Titanio Natural</p>
+                            </div>
+                            <div class="space-y-3 text-gray-700">
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> Chip A18 Pro de última generación</p>
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> Sistema de cámara Pro 48MP</p>
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> Pantalla Super Retina XDR 6.9"</p>
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> USB-C con Thunderbolt</p>
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> Construcción en Titanio Premium</p>
+                            </div>
+                            <div class="text-center mt-8">
+                                <p class="text-3xl font-bold att-blue mb-2">$33.34/mes</p>
+                                <p class="text-sm text-gray-500 mb-1">36 meses sin intereses</p>
+                                <p class="text-lg text-gray-600 line-through mb-4">Precio regular: $1,200</p>
+                                <a href="https://crediporttca.github.io/Reserva-ya-tu-Smartphone/" target="_blank" 
+                                   class="w-full block bg-gradient-to-r from-blue-500 to-purple-500 text-white py-4 rounded-lg font-bold hover:from-blue-600 hover:to-purple-600 text-lg transition-all duration-300 transform hover:scale-105">
+                                    🚀 Reservar iPhone 16 Pro Max
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Samsung Galaxy S25 Ultra -->
+                        <div class="card-shadow rounded-2xl p-8 bg-gradient-to-br from-blue-50 to-indigo-100 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border-2 border-blue-200">
+                            <div class="text-center mb-6">
+                                <div class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold inline-block mb-4">
+                                    ⭐ DESTACADO
+                                </div>
+                                <div class="w-48 h-60 mx-auto mb-6 rounded-2xl overflow-hidden shadow-lg">
+                                    <img src="https://crediporttca.github.io/Reserva-ya-tu-Smartphone/images/galaxys24ultra.jpg" 
+                                         alt="Samsung Galaxy S25 Ultra" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                    <div class="w-full h-full bg-gradient-to-b from-gray-800 to-black flex items-center justify-center" style="display: none;">
+                                        <div class="w-32 h-40 bg-gradient-to-b from-indigo-900 to-blue-900 rounded-xl flex items-center justify-center">
+                                            <span class="text-white text-2xl">📱</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <h4 class="text-2xl font-bold text-gray-800 mb-2">Galaxy S25 Ultra</h4>
+                                <p class="text-lg text-gray-600">256GB - Titanium Gray</p>
+                            </div>
+                            <div class="space-y-3 text-gray-700">
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> Snapdragon 8 Elite para Galaxy</p>
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> Cámara principal 200MP</p>
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> S Pen integrado incluido</p>
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> Galaxy AI con traducción en vivo</p>
+                                <p class="flex items-center"><span class="text-green-500 mr-3 text-lg">✓</span> Pantalla Dynamic AMOLED 6.8"</p>
+                            </div>
+                            <div class="text-center mt-8">
+                                <p class="text-3xl font-bold att-blue mb-2">$36.12/mes</p>
+                                <p class="text-sm text-gray-500 mb-1">36 meses sin intereses</p>
+                                <p class="text-lg text-gray-600 line-through mb-4">Precio regular: $1,300</p>
+                                <a href="https://crediporttca.github.io/Reserva-ya-tu-Smartphone/" target="_blank" 
+                                   class="w-full block bg-gradient-to-r from-blue-500 to-indigo-500 text-white py-4 rounded-lg font-bold hover:from-blue-600 hover:to-indigo-600 text-lg transition-all duration-300 transform hover:scale-105">
+                                    🚀 Reservar Galaxy S25 Ultra
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <div class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-2xl p-6 border border-purple-200">
+                            <h4 class="text-xl font-bold mb-3 text-purple-800">🎯 Financiamiento Especial CrediPort</h4>
+                            <div class="grid md:grid-cols-4 gap-4 text-center">
+                                <div class="bg-white rounded-lg p-3 shadow-sm">
+                                    <p class="text-lg font-bold text-purple-600">$0</p>
+                                    <p class="text-xs text-gray-600">Enganche</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-3 shadow-sm">
+                                    <p class="text-lg font-bold text-purple-600">0%</p>
+                                    <p class="text-xs text-gray-600">Intereses</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-3 shadow-sm">
+                                    <p class="text-lg font-bold text-purple-600">36</p>
+                                    <p class="text-xs text-gray-600">Meses</p>
+                                </div>
+                                <div class="bg-white rounded-lg p-3 shadow-sm">
+                                    <p class="text-lg font-bold text-purple-600">24h</p>
+                                    <p class="text-xs text-gray-600">Aprobación</p>
+                                </div>
+                            </div>
+                            <a href="https://crediporttca.github.io/Reserva-ya-tu-Smartphone/" target="_blank" 
+                               class="inline-block mt-4 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105">
+                                🚀 Explorar Todos los Smartphones
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -636,21 +832,21 @@
                 <div class="grid md:grid-cols-2 gap-12">
                     <div class="card-shadow rounded-2xl p-8 bg-white">
                         <h3 class="text-2xl font-bold mb-6 att-blue">Verifica tu Cobertura</h3>
-                        <form class="space-y-4">
+                        <form id="coberturaForm" class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 mb-2">Dirección</label>
-                                <input type="text" placeholder="Ingresa tu dirección completa" 
+                                <input type="text" id="direccionCobertura" placeholder="Ingresa tu dirección completa" 
                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Ciudad</label>
-                                    <input type="text" placeholder="Ciudad" 
+                                    <input type="text" id="ciudadCobertura" placeholder="Ciudad" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Código Postal</label>
-                                    <input type="text" placeholder="12345" 
+                                    <input type="text" id="codigoPostalCobertura" placeholder="12345" 
                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 </div>
                             </div>
@@ -658,6 +854,9 @@
                                 Verificar Disponibilidad
                             </button>
                         </form>
+                        
+                        <!-- Resultado de cobertura -->
+                        <div id="resultadoCobertura" class="mt-6 p-4 rounded-lg hidden"></div>
                     </div>
 
                     <div class="space-y-6">
@@ -693,13 +892,53 @@
                 <!-- Coverage Map -->
                 <div class="mt-16">
                     <div class="card-shadow rounded-2xl p-8 bg-white text-center">
-                        <h3 class="text-2xl font-bold mb-6 att-blue">Mapa de Cobertura</h3>
-                        <div class="bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl p-12">
-                            <div class="text-8xl mb-4">🗺️</div>
-                            <p class="text-xl text-gray-600 mb-4">Mapa Interactivo de Cobertura</p>
-                            <p class="text-gray-500">
-                                Consulta la disponibilidad de servicios AT&T en tu área específica
-                            </p>
+                        <h3 class="text-2xl font-bold mb-6 att-blue">Mapa de Cobertura AT&T</h3>
+                        <div class="bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl p-6">
+                            <div class="mb-4">
+                                <p class="text-lg text-gray-700 mb-4">Consulta el mapa oficial de cobertura AT&T</p>
+                                <div class="flex justify-center space-x-4 mb-6">
+                                    <a href="https://www.att.com/maps/wireless-coverage.html" target="_blank" 
+                                       class="bg-blue-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-blue-600 transition-all duration-300">
+                                        📶 Ver Cobertura Móvil
+                                    </a>
+                                    <a href="https://www.att.com/buy/internet/plans/?product_suite=NBB&fiber_intent=true" target="_blank" 
+                                       class="bg-green-500 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-600 transition-all duration-300">
+                                        🌐 Ver Cobertura Fibra
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Mapa embebido -->
+                            <div class="bg-white rounded-lg p-4 shadow-inner">
+                                <iframe src="https://www.att.com/maps/wireless-coverage.html" 
+                                        width="100%" 
+                                        height="400" 
+                                        frameborder="0" 
+                                        class="rounded-lg"
+                                        title="Mapa de Cobertura AT&T"
+                                        onload="this.style.display='block'"
+                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                </iframe>
+                                
+                                <!-- Fallback si el iframe no carga -->
+                                <div class="text-center py-12" style="display: none;">
+                                    <div class="text-6xl mb-4">🗺️</div>
+                                    <p class="text-lg text-gray-600 mb-4">Mapa de Cobertura AT&T</p>
+                                    <p class="text-gray-500 mb-4">
+                                        Para ver el mapa interactivo completo, visita el sitio oficial de AT&T
+                                    </p>
+                                    <div class="space-y-2">
+                                        <a href="https://www.att.com/maps/wireless-coverage.html" target="_blank" 
+                                           class="block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                                            Ver Mapa de Cobertura Móvil
+                                        </a>
+                                        <a href="https://www.att.com/buy/internet/plans/?product_suite=NBB&fiber_intent=true" target="_blank" 
+                                           class="block bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">
+                                            Ver Disponibilidad de Fibra
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -945,11 +1184,26 @@
 
         // Formulario de solicitud de servicio con Formspree
         document.getElementById('visitForm').addEventListener('submit', function(e) {
-            // Obtener servicios seleccionados y agregarlos como campo oculto
+            // Validar que al menos un servicio esté seleccionado
             const servicios = [];
             if (document.getElementById('internet').checked) servicios.push('Internet Fibra');
             if (document.getElementById('movil').checked) servicios.push('5G Móvil');
             if (document.getElementById('telefonia').checked) servicios.push('Financiamiento de Teléfonos');
+            
+            if (servicios.length === 0) {
+                e.preventDefault();
+                mostrarMensaje('Por favor selecciona al menos un servicio de interés.', 'error');
+                return;
+            }
+            
+            // Validar formato de teléfono
+            const telefono = document.getElementById('telefono').value;
+            const telefonoRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            if (!telefonoRegex.test(telefono.replace(/[\s\-\(\)]/g, ''))) {
+                e.preventDefault();
+                mostrarMensaje('Por favor ingresa un número de teléfono válido.', 'error');
+                return;
+            }
             
             // Agregar servicios como campo oculto para Formspree
             let serviciosInput = document.getElementById('servicios-hidden');
@@ -962,8 +1216,26 @@
             }
             serviciosInput.value = servicios.join(', ');
             
-            // Permitir que el formulario se envíe normalmente a Formspree
-            // No prevenir el comportamiento por defecto
+            // Mostrar estado de carga
+            const submitButton = document.getElementById('submitButton');
+            const submitText = document.getElementById('submitText');
+            const loadingText = document.getElementById('loadingText');
+            
+            submitButton.disabled = true;
+            submitText.classList.add('hidden');
+            loadingText.classList.remove('hidden');
+            
+            // Simular envío y mostrar confirmación después de un breve delay
+            setTimeout(() => {
+                mostrarMensaje('¡Solicitud enviada exitosamente! Te contactaremos dentro de las próximas 2 horas. 📞', 'success');
+                
+                // Restaurar botón después del envío
+                setTimeout(() => {
+                    submitButton.disabled = false;
+                    submitText.classList.remove('hidden');
+                    loadingText.classList.add('hidden');
+                }, 2000);
+            }, 1000);
         });
 
         // Formulario de contacto
@@ -1002,10 +1274,125 @@
             }, 5000);
         }
 
+        // Función para verificar cobertura
+        document.getElementById('coberturaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const direccion = document.getElementById('direccionCobertura').value;
+            const ciudad = document.getElementById('ciudadCobertura').value;
+            const codigoPostal = document.getElementById('codigoPostalCobertura').value;
+            
+            if (!direccion && !codigoPostal) {
+                mostrarResultadoCobertura('Por favor ingresa una dirección o código postal.', 'error');
+                return;
+            }
+            
+            // Simular verificación de cobertura
+            mostrarResultadoCobertura('Verificando cobertura...', 'loading');
+            
+            setTimeout(() => {
+                // Simulación de resultado basado en código postal común
+                const codigosConCobertura = ['75201', '75202', '75203', '10001', '10002', '90210', '90211', '77001', '77002'];
+                const tieneCobertura = codigosConCobertura.includes(codigoPostal) || codigoPostal.startsWith('75') || codigoPostal.startsWith('10');
+                
+                if (tieneCobertura) {
+                    mostrarResultadoCobertura(`
+                        <div class="text-center">
+                            <div class="text-4xl mb-3">✅</div>
+                            <h4 class="text-lg font-bold text-green-700 mb-2">¡Excelente! Servicios disponibles</h4>
+                            <div class="space-y-2 text-sm">
+                                <p class="flex items-center justify-center"><span class="text-green-500 mr-2">✓</span> Internet Fibra hasta 1000 Mbps</p>
+                                <p class="flex items-center justify-center"><span class="text-green-500 mr-2">✓</span> 5G Ultra Wideband</p>
+                                <p class="flex items-center justify-center"><span class="text-green-500 mr-2">✓</span> Planes móviles ilimitados</p>
+                            </div>
+                            <a href="https://wa.me/19453605214?text=¡Hola%20CrediPort!%20Verifiqué%20que%20tienen%20cobertura%20en%20mi%20área%20(${codigoPostal}).%20Me%20gustaría%20que%20me%20visiten%20para%20conocer%20las%20promociones%20disponibles.%20🏠" 
+                               target="_blank"
+                               class="inline-block mt-4 bg-green-500 text-white px-6 py-2 rounded-lg font-bold hover:bg-green-600">
+                                📞 Solicitar Visita por WhatsApp
+                            </a>
+                        </div>
+                    `, 'success');
+                } else {
+                    mostrarResultadoCobertura(`
+                        <div class="text-center">
+                            <div class="text-4xl mb-3">⚠️</div>
+                            <h4 class="text-lg font-bold text-orange-700 mb-2">Cobertura limitada en tu área</h4>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Algunos servicios pueden estar disponibles. Te recomendamos contactarnos para verificar opciones específicas.
+                            </p>
+                            <div class="space-y-2">
+                                <a href="https://www.att.com/maps/wireless-coverage.html" target="_blank" 
+                                   class="block bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm">
+                                    Ver Mapa Oficial de Cobertura
+                                </a>
+                                <a href="https://wa.me/19453605214?text=Hola%20CrediPort,%20consulté%20cobertura%20para%20mi%20área%20(${codigoPostal})%20y%20me%20gustaría%20saber%20qué%20servicios%20están%20disponibles.%20¿Podrían%20ayudarme?" 
+                                   target="_blank"
+                                   class="block bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 text-sm">
+                                    📞 Consultar por WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    `, 'warning');
+                }
+            }, 2000);
+        });
+        
+        function mostrarResultadoCobertura(html, tipo) {
+            const resultado = document.getElementById('resultadoCobertura');
+            let claseColor = '';
+            
+            switch(tipo) {
+                case 'success':
+                    claseColor = 'bg-green-100 border-green-300 text-green-800';
+                    break;
+                case 'error':
+                    claseColor = 'bg-red-100 border-red-300 text-red-800';
+                    break;
+                case 'warning':
+                    claseColor = 'bg-orange-100 border-orange-300 text-orange-800';
+                    break;
+                case 'loading':
+                    claseColor = 'bg-blue-100 border-blue-300 text-blue-800';
+                    break;
+                default:
+                    claseColor = 'bg-gray-100 border-gray-300 text-gray-800';
+            }
+            
+            resultado.className = `mt-6 p-4 rounded-lg border-2 ${claseColor}`;
+            resultado.innerHTML = html;
+            resultado.classList.remove('hidden');
+            
+            // Auto-ocultar después de 30 segundos para mensajes de error
+            if (tipo === 'error') {
+                setTimeout(() => {
+                    resultado.classList.add('hidden');
+                }, 30000);
+            }
+        }
+
+        // Función para toggle del menú móvil
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Event listener para el botón del menú móvil
+        document.getElementById('mobile-menu-button').addEventListener('click', toggleMobileMenu);
+
+        // Cerrar menú móvil al hacer clic fuera
+        document.addEventListener('click', function(event) {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            
+            if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+
         // Inicializar página de inicio
         document.addEventListener('DOMContentLoaded', function() {
             goToPage('inicio');
         });
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972c7fda322ed941',t:'MTc1NTgwNDE0OC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'972d5ea1466a875b',t:'MTc1NTgxMzI3My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
